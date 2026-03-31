@@ -1,0 +1,43 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.out/
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Editores
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.pem
+.cache/
