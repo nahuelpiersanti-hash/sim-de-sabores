@@ -933,6 +933,33 @@ tr:hover td { background: rgba(255,255,255,0.015); }
 <div class="toast" id="toast"></div>
 
 <script>
+// ── SUPABASE CONFIG ───────────────────────────────
+const SB_URL  = 'https://myuagmnrqqitvgfvpzwz.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15dWFnbW5ycXFpdHZnZnZwend6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5ODA4MTQsImV4cCI6MjA5MDU1NjgxNH0.lzT4GWKSdPGGBDyrznKrVc8Eo3FoPUbr3WxgKha7wfM';
+const HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` };
+
+async function sbGet(table) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?order=id`, { headers: HEADERS });
+  return r.json();
+}
+async function sbInsert(table, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST', headers: { ...HEADERS, 'Prefer': 'return=representation' },
+    body: JSON.stringify(data)
+  });
+  return r.json();
+}
+async function sbUpdate(table, id, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH', headers: { ...HEADERS, 'Prefer': 'return=representation' },
+    body: JSON.stringify(data)
+  });
+  return r.json();
+}
+async function sbDelete(table, id) {
+  await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { method: 'DELETE', headers: HEADERS });
+}
+
 // ── AUTH ──────────────────────────────────────────
 const CREDS = { user: 'admin', pass: 'cafe2024' };
 
@@ -971,84 +998,37 @@ function changePass() {
 }
 
 // ── DATA ──────────────────────────────────────────
-const DEFAULT_MENU = [
-  {id:1, name:'Espresso', cat:'Café', price:'R$10 / R$12', active:true},
-  {id:2, name:'Latte', cat:'Café', price:'R$ 13', active:true},
-  {id:3, name:'Machiatto', cat:'Café', price:'R$ 13', active:true},
-  {id:4, name:'Pingado', cat:'Café', price:'R$ 13', active:true},
-  {id:5, name:'Capuccino Italiano', cat:'Café', price:'R$ 15', active:true},
-  {id:6, name:'Capuccino Amarula', cat:'Café', price:'R$ 18', active:true},
-  {id:7, name:'Mocha', cat:'Café', price:'R$ 16', active:true},
-  {id:8, name:'Espresso Ice', cat:'Café', price:'R$ 15', active:true},
-  {id:9, name:'Latte Ice', cat:'Café', price:'R$ 17', active:true},
-  {id:10, name:'Chocolate Quente', cat:'Chocolate e Chá', price:'R$ 15', active:true},
-  {id:11, name:'Chocolate Gelado', cat:'Chocolate e Chá', price:'R$ 15', active:true},
-  {id:12, name:'Chá', cat:'Chocolate e Chá', price:'R$ 9', active:true},
-  {id:13, name:'Medialunas', cat:'Doces', price:'R$ 6', active:true},
-  {id:14, name:'Croissant com presunto e queijo', cat:'Doces', price:'R$ 18', active:true},
-  {id:15, name:'Fatia de bolo', cat:'Doces', price:'R$ 23', active:true},
-  {id:16, name:'Crumble de maçã', cat:'Doces', price:'R$ 18', active:true},
-  {id:17, name:'Medialuna com presunto e queijo', cat:'Doces', price:'R$ 14', active:true},
-  {id:18, name:'Pão de queijo', cat:'Salgados', price:'R$ 7', active:true},
-  {id:19, name:'Coxinha de Frango / Costela', cat:'Salgados', price:'R$ 12', active:true},
-  {id:20, name:'Ovos Mexidos', cat:'Salgados', price:'R$ 12', active:true},
-  {id:21, name:'Torrada com ovo e abacate', cat:'Salgados', price:'R$ 15', active:true},
-  {id:22, name:'Misto Quente', cat:'Salgados', price:'R$ 15 / R$18', active:true},
-  {id:23, name:'Natural de presunto cru', cat:'Salgados', price:'R$ 20', active:true},
-  {id:24, name:'Carne / Capresse / Milho / Frango', cat:'Empanadas', price:'R$ 12-13', active:true},
-  {id:25, name:'Presunto abacaxi e mussarela', cat:'Empanadas', price:'R$ 12', active:true},
-  {id:26, name:'Frango / Palmito', cat:'Enpadas', price:'R$ 12', active:true},
-  {id:27, name:'Laranja / Limão / Morango / Abacaxi c/Hortelã', cat:'Sucos Naturais', price:'R$ 14', active:true},
-  {id:28, name:'Vitamina Banana / Morango', cat:'Vitaminas', price:'R$ 16', active:true},
-  {id:29, name:'Água c/ s gás', cat:'Bebidas', price:'R$ 5', active:true},
-  {id:30, name:'Refrigerante LATA 350ml', cat:'Bebidas', price:'R$ 7', active:true},
-  {id:31, name:'Cerveja LATA 350ml', cat:'Bebidas', price:'R$ 7', active:true},
-  {id:32, name:'Cerveja LONGNECK', cat:'Bebidas', price:'R$ 13', active:true},
-  {id:33, name:'Cream cheese, presunto espanhol e rúcula', cat:'Bruschettas', price:'R$ 45', active:true},
-  {id:34, name:'Abacate, tomate assado e ovo', cat:'Bruschettas', price:'R$ 55', active:true},
-  {id:35, name:'Gorgonzola, peras, nozes e mel', cat:'Bruschettas', price:'R$ 60', active:true},
-];
-
-const DEFAULT_COMBOS = [
-  {id:1, desc:'Café ou chá + 2 medialunas + suco de laranja', price:'R$ 30', active:true},
-  {id:2, desc:'Café ou chá + Misto Quente', price:'R$ 25', active:true},
-  {id:3, desc:'Coxinha + Refri lata', price:'R$ 16', active:true},
-];
-
-const DEFAULT_ARG = [
-  {id:1, name:'Yerba mate', cat:'Armazém', active:true},
-  {id:2, name:'Chá (Té)', cat:'Armazém', active:true},
-  {id:3, name:'Mate cocido', cat:'Armazém', active:true},
-  {id:4, name:'Dulce de leche', cat:'Armazém', active:true},
-  {id:5, name:'Aceite de girasol', cat:'Armazém', active:true},
-  {id:6, name:'Minerva', cat:'Armazém', active:true},
-  {id:7, name:'Aceto', cat:'Armazém', active:true},
-  {id:8, name:'Vinagre', cat:'Armazém', active:true},
-  {id:9, name:'Fernet Branca Comum', cat:'Aperitivos', active:true},
-  {id:10, name:'Fernet Branca Menta', cat:'Aperitivos', active:true},
-  {id:11, name:'Fernet 1882', cat:'Aperitivos', active:true},
-  {id:12, name:'Gancia', cat:'Aperitivos', active:true},
-  {id:13, name:'Aperol', cat:'Aperitivos', active:true},
-];
-
-function load(key, def) {
-  try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; }
-}
-
-function save(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
-let menuData, combosData, argData;
+let menuData = [], combosData = [], argData = [];
 let activeCatFilter = 'all';
 let searchQuery = '';
-let nextId = { menu: 100, combo: 100, arg: 100 };
 
-function init() {
-  menuData = load('sds_menu', DEFAULT_MENU);
-  combosData = load('sds_combos', DEFAULT_COMBOS);
-  argData = load('sds_arg', DEFAULT_ARG);
-  renderAll();
+async function init() {
+  setLoading(true);
+  try {
+    [menuData, combosData, argData] = await Promise.all([
+      sbGet('menu'),
+      sbGet('combos'),
+      sbGet('argentinos'),
+    ]);
+    // normalizar campo desc/description
+    menuData = menuData.map(i => ({ ...i, desc: i.description || '' }));
+    combosData = combosData.map(c => ({ ...c, desc: c.description }));
+    renderAll();
+  } catch(e) {
+    toast('⚠ Erro ao carregar dados');
+  }
+  setLoading(false);
+}
+
+function setLoading(on) {
+  document.getElementById('topbar-title').textContent = on ? 'Carregando...' : currentPanelTitle();
+}
+
+function currentPanelTitle() {
+  const active = document.querySelector('.panel.active');
+  if (!active) return 'Admin';
+  const map = { 'panel-menu': 'Itens do Cardápio', 'panel-combos': 'Combos Especiais', 'panel-argentinos': 'Produtos Argentinos', 'panel-settings': 'Configurações' };
+  return map[active.id] || 'Admin';
 }
 
 // ── RENDER ────────────────────────────────────────
@@ -1187,39 +1167,37 @@ function openModal(id = null) {
 
 function editItem(id) { openModal(id); }
 
-function saveItem() {
+async function saveItem() {
   const id = document.getElementById('edit-id').value;
   const name = document.getElementById('form-name').value.trim();
   const price = document.getElementById('form-price').value.trim();
   const cat = document.getElementById('form-cat').value;
-  const desc = document.getElementById('form-desc').value.trim();
+  const description = document.getElementById('form-desc').value.trim();
   if (!name || !price) { toast('Preencha nome e preço'); return; }
-  if (id) {
-    const i = menuData.findIndex(x => x.id === parseInt(id));
-    menuData[i] = { ...menuData[i], name, price, cat, desc };
-    toast('✓ Item atualizado');
-  } else {
-    menuData.push({ id: Date.now(), name, price, cat, desc, active: true });
-    toast('✓ Item adicionado');
-  }
-  save('sds_menu', menuData);
-  closeModal('item-modal');
-  renderAll();
+  try {
+    if (id) {
+      await sbUpdate('menu', id, { name, price, cat, description });
+      toast('✓ Item atualizado');
+    } else {
+      await sbInsert('menu', { name, price, cat, description, active: true });
+      toast('✓ Item adicionado');
+    }
+    closeModal('item-modal');
+    await init();
+  } catch { toast('⚠ Erro ao salvar'); }
 }
 
-function deleteItem(id) {
+async function deleteItem(id) {
   if (!confirm('Excluir este item?')) return;
-  menuData = menuData.filter(i => i.id !== id);
-  save('sds_menu', menuData);
-  renderAll();
+  await sbDelete('menu', id);
   toast('Item removido');
+  await init();
 }
 
-function toggleItem(id) {
-  const i = menuData.findIndex(x => x.id === id);
-  menuData[i].active = !menuData[i].active;
-  save('sds_menu', menuData);
-  renderAll();
+async function toggleItem(id) {
+  const item = menuData.find(x => x.id === id);
+  await sbUpdate('menu', id, { active: !item.active });
+  await init();
 }
 
 // ── COMBOS CRUD ───────────────────────────────────
@@ -1228,7 +1206,7 @@ function openComboModal(id = null) {
   if (id) {
     const c = combosData.find(x => x.id === id);
     document.getElementById('combo-modal-title').textContent = 'Editar combo';
-    document.getElementById('combo-desc').value = c.desc;
+    document.getElementById('combo-desc').value = c.description || c.desc;
     document.getElementById('combo-price').value = c.price;
   } else {
     document.getElementById('combo-modal-title').textContent = 'Novo combo';
@@ -1240,37 +1218,35 @@ function openComboModal(id = null) {
 
 function editCombo(id) { openComboModal(id); }
 
-function saveCombo() {
+async function saveCombo() {
   const id = document.getElementById('edit-combo-id').value;
-  const desc = document.getElementById('combo-desc').value.trim();
+  const description = document.getElementById('combo-desc').value.trim();
   const price = document.getElementById('combo-price').value.trim();
-  if (!desc || !price) { toast('Preencha todos os campos'); return; }
-  if (id) {
-    const i = combosData.findIndex(x => x.id === parseInt(id));
-    combosData[i] = { ...combosData[i], desc, price };
-    toast('✓ Combo atualizado');
-  } else {
-    combosData.push({ id: Date.now(), desc, price, active: true });
-    toast('✓ Combo adicionado');
-  }
-  save('sds_combos', combosData);
-  closeModal('combo-modal');
-  renderAll();
+  if (!description || !price) { toast('Preencha todos os campos'); return; }
+  try {
+    if (id) {
+      await sbUpdate('combos', id, { description, price });
+      toast('✓ Combo atualizado');
+    } else {
+      await sbInsert('combos', { description, price, active: true });
+      toast('✓ Combo adicionado');
+    }
+    closeModal('combo-modal');
+    await init();
+  } catch { toast('⚠ Erro ao salvar'); }
 }
 
-function deleteCombo(id) {
+async function deleteCombo(id) {
   if (!confirm('Excluir este combo?')) return;
-  combosData = combosData.filter(x => x.id !== id);
-  save('sds_combos', combosData);
-  renderAll();
+  await sbDelete('combos', id);
   toast('Combo removido');
+  await init();
 }
 
-function toggleCombo(id) {
-  const i = combosData.findIndex(x => x.id === id);
-  combosData[i].active = !combosData[i].active;
-  save('sds_combos', combosData);
-  renderAll();
+async function toggleCombo(id) {
+  const c = combosData.find(x => x.id === id);
+  await sbUpdate('combos', id, { active: !c.active });
+  await init();
 }
 
 // ── ARG CRUD ──────────────────────────────────────
@@ -1288,37 +1264,35 @@ function openArgModal(id = null) {
 
 function editArg(id) { openArgModal(id); }
 
-function saveArg() {
+async function saveArg() {
   const id = document.getElementById('edit-arg-id').value;
   const name = document.getElementById('arg-name').value.trim();
   const cat = document.getElementById('arg-cat').value;
   if (!name) { toast('Preencha o nome'); return; }
-  if (id) {
-    const i = argData.findIndex(x => x.id === parseInt(id));
-    argData[i] = { ...argData[i], name, cat };
-    toast('✓ Produto atualizado');
-  } else {
-    argData.push({ id: Date.now(), name, cat, active: true });
-    toast('✓ Produto adicionado');
-  }
-  save('sds_arg', argData);
-  closeModal('arg-modal');
-  renderAll();
+  try {
+    if (id) {
+      await sbUpdate('argentinos', id, { name, cat });
+      toast('✓ Produto atualizado');
+    } else {
+      await sbInsert('argentinos', { name, cat, active: true });
+      toast('✓ Produto adicionado');
+    }
+    closeModal('arg-modal');
+    await init();
+  } catch { toast('⚠ Erro ao salvar'); }
 }
 
-function deleteArg(id) {
+async function deleteArg(id) {
   if (!confirm('Excluir este produto?')) return;
-  argData = argData.filter(x => x.id !== id);
-  save('sds_arg', argData);
-  renderAll();
+  await sbDelete('argentinos', id);
   toast('Produto removido');
+  await init();
 }
 
-function toggleArg(id) {
-  const i = argData.findIndex(x => x.id === id);
-  argData[i].active = !argData[i].active;
-  save('sds_arg', argData);
-  renderAll();
+async function toggleArg(id) {
+  const a = argData.find(x => x.id === id);
+  await sbUpdate('argentinos', id, { active: !a.active });
+  await init();
 }
 
 // ── SETTINGS ──────────────────────────────────────
@@ -1336,17 +1310,18 @@ function exportData() {
 
 function importDataTrigger() { document.getElementById('import-file').click(); }
 
-function importData(e) {
+async function importData(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = async ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      if (d.menu) { menuData = d.menu; save('sds_menu', menuData); }
-      if (d.combos) { combosData = d.combos; save('sds_combos', combosData); }
-      if (d.arg) { argData = d.arg; save('sds_arg', argData); }
-      renderAll();
+      toast('Importando...');
+      if (d.menu) for (const item of d.menu) await sbInsert('menu', { name: item.name, cat: item.cat, price: item.price, description: item.desc || '', active: item.active });
+      if (d.combos) for (const c of d.combos) await sbInsert('combos', { description: c.desc || c.description, price: c.price, active: c.active });
+      if (d.arg) for (const a of d.arg) await sbInsert('argentinos', { name: a.name, cat: a.cat, active: a.active });
+      await init();
       toast('✓ Dados importados');
     } catch { toast('Erro ao importar arquivo'); }
   };
