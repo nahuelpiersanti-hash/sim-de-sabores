@@ -41,3 +41,6 @@ yarn-error.log*
 # Misc
 *.pem
 .cache/
+server/data/*.sqlite
+server/data/*.sqlite-shm
+server/data/*.sqlite-wal

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Sim de Sabores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-page">
+    <header class="admin-topbar">
+      <div class="brand-block">
+        <a class="brand" href="/index.html">Sim de Sabores</a>
+        <span class="brand-sub">Portal de gestion | almacen</span>
+      </div>
+      <nav class="admin-nav">
+        <a href="/index.html">Tienda</a>
+        <a href="#dashboard">Dashboard</a>
+        <a class="active" href="#productos">Productos</a>
+        <a href="#pagos">Pagos</a>
+        <a href="#operacion">Operacion</a>
+      </nav>
+      <div class="topbar-tags">
+        <span class="tag neutral">sincronizado (local)</span>
+        <span class="tag">modo operador</span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="page-head" id="dashboard">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h1>Portal comercial Argentina-Brasil</h1>
+          <p class="head-copy">Catalogo en BRL para clientes brasileros, carga operativa en espanol y cierre de venta por WhatsApp.</p>
+        </div>
+      </section>
+
+      <section class="stats-strip">
+        <article class="stat-box">
+          <span>Total catalogado</span>
+          <strong id="stat-total">0</strong>
+        </article>
+        <article class="stat-box">
+          <span>Publicados</span>
+          <strong id="stat-available">0</strong>
+        </article>
+        <article class="stat-box">
+          <span>Categorias</span>
+          <strong id="stat-categories">0</strong>
+        </article>
+        <article class="stat-box fixed-box">
+          <span>Medios activos</span>
+          <strong>Pix + MP</strong>
+        </article>
+      </section>
+
+      <section class="workspace-grid" id="productos">
+        <section class="panel form-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Alta y edicion</p>
+              <h2 id="form-title">Crear producto</h2>
+            </div>
+            <button id="reset-form-button" class="ghost-button" type="button">Nuevo</button>
+          </div>
+
+          <form id="product-form" class="product-form">
+            <input id="product-id" type="hidden">
+
+            <label>
+              <span>Nombre comercial</span>
+              <input id="name" name="name" type="text" placeholder="Ej: Yerba Mate Canarias 1 kg" required>
+            </label>
+
+            <label>
+              <span>Categoria</span>
+              <input id="category" name="category" type="text" placeholder="Ej: Yerbas & Mate" required>
+            </label>
+
+            <label>
+              <span>Precio BRL</span>
+              <input id="price" name="price" type="number" min="0" step="0.01" placeholder="0.00" required>
+            </label>
+
+            <label>
+              <span>Imagen</span>
+              <input id="image" name="image" type="url" placeholder="https://...">
+            </label>
+
+            <label class="full-span">
+              <span>Descripcion para la tienda</span>
+              <textarea id="description" name="description" rows="4" placeholder="Describe el producto para publico brasilero"></textarea>
+            </label>
+
+            <label class="toggle-row full-span">
+              <input id="available" name="available" type="checkbox" checked>
+              <span>Publicado en tienda y disponible para checkout</span>
+            </label>
+
+            <p class="full-span form-note">Carga operativa: el operador define nombre, categoria y precio en BRL. La tienda publica ofrece Pix, Mercado Pago, tarjetas, transferencia y efectivo.</p>
+
+            <div class="form-actions full-span">
+              <button class="primary-button" type="submit">Guardar producto</button>
+              <button id="cancel-edit-button" class="ghost-button" type="button">Cancelar edicion</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Listado</p>
+              <h2>Catalogo en produccion</h2>
+            </div>
+            <input id="admin-search" class="table-search" type="search" placeholder="Filtrar por nombre, categoria o descripcion">
+          </div>
+
+          <div id="admin-message" class="admin-message">Cargando productos...</div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoria</th>
+                  <th>Precio BRL</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="support-grid" id="pagos">
+        <article class="panel info-panel">
+          <p class="eyebrow">Pagos</p>
+          <h2>Checkout comercial</h2>
+          <ul class="info-list">
+            <li>Pix para cierre rapido con cliente brasilero.</li>
+            <li>Mercado Pago para enlaces y QR cuando haga falta.</li>
+            <li>Tarjeta, transferencia y dinero como respaldo operativo.</li>
+          </ul>
+        </article>
+
+        <article class="panel info-panel" id="operacion">
+          <p class="eyebrow">Operacion</p>
+          <h2>Lectura del negocio</h2>
+          <ul class="info-list">
+            <li>Backoffice en espanol para operadores argentinos.</li>
+            <li>Frontend en portugues para cliente final brasilero.</li>
+            <li>Precios siempre expresados en real y confirmados por WhatsApp.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

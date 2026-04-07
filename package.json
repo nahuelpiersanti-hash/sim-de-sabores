@@ -1,0 +1,26 @@
+{
+  "name": "sim-de-sabores",
+  "version": "1.0.0",
+  "description": "Catalogo dinamico y panel admin para Sim de Sabores con Express y SQLite.",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "node server/server.js",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nahuelpiersanti-hash/sim-de-sabores.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nahuelpiersanti-hash/sim-de-sabores/issues"
+  },
+  "homepage": "https://github.com/nahuelpiersanti-hash/sim-de-sabores#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "sqlite3": "^6.0.1"
+  }
+}

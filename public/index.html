@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sim de Sabores Cafe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="#inicio">Sim de Sabores</a>
+      <span class="brand-sub">Argentina no Brasil</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="top-link" href="/admin.html">Portal</a>
+      <a class="top-link" href="#catalogo">Loja</a>
+      <a class="top-link active" href="#carrito">Carrinho <span id="top-cart-count">0</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Loja conectada ao portal de gestao</p>
+          <h1>Sabores argentinos para clientes brasileiros, cobrando em real e fechando pelo WhatsApp.</h1>
+          <p class="hero-copy">O operador trabalha em espanhol no portal, publica produtos no servidor propio y la tienda responde em portugues com Pix, Mercado Pago, cartao, transferencia e dinheiro.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#catalogo">Comprar agora</a>
+            <a class="btn btn-secondary" href="/admin.html">Abrir portal</a>
+          </div>
+          <div class="hero-note">
+            <span id="hero-count">0 produtos disponiveis</span>
+            <span class="dot"></span>
+            <span>Operacao local sincronizada em tempo real</span>
+          </div>
+        </div>
+
+        <aside class="hero-board">
+          <div class="hero-board-line">
+            <span class="hero-label">Publico</span>
+            <strong>argentinos operando, brasileiros comprando</strong>
+          </div>
+          <div class="hero-board-line">
+            <span class="hero-label">Pagamentos</span>
+            <strong>Pix, Mercado Pago, cartoes e dinheiro</strong>
+          </div>
+          <div class="hero-board-line">
+            <span class="hero-label">Moeda</span>
+            <strong>BRL em toda a experiencia de compra</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shop-shell" id="catalogo">
+      <aside class="filter-card">
+        <div class="panel-title-row">
+          <div>
+            <p class="eyebrow">Filtros</p>
+            <h2>Categorias</h2>
+          </div>
+          <span class="panel-badge">Local</span>
+        </div>
+
+        <div class="filter-block">
+          <label class="filter-label" for="search-input">Buscar</label>
+          <input id="search-input" class="filter-input" type="search" placeholder="Yerba, dulce, fernet...">
+        </div>
+
+        <div class="filter-block">
+          <span class="filter-label">Categorias</span>
+          <div id="category-buttons" class="category-buttons"></div>
+        </div>
+
+        <div class="filter-block price-block">
+          <div>
+            <label class="filter-label" for="min-price">Preco min.</label>
+            <input id="min-price" class="filter-input" type="number" min="0" step="0.01" placeholder="0">
+          </div>
+          <div>
+            <label class="filter-label" for="max-price">Preco max.</label>
+            <input id="max-price" class="filter-input" type="number" min="0" step="0.01" placeholder="Sem limite">
+          </div>
+        </div>
+
+        <p class="filter-help">Todos os itens exibidos estao publicados e prontos para venda em BRL.</p>
+        <button id="clear-filters" class="btn btn-secondary full" type="button">Limpar filtros</button>
+      </aside>
+
+      <section class="catalog-panel">
+        <div class="panel-title-row board-title">
+          <div>
+            <p class="eyebrow">Comprar</p>
+            <h2>Catalogo publicado</h2>
+          </div>
+          <div class="live-chip">estoque em tempo real (local)</div>
+        </div>
+
+        <div id="status-message" class="status-message">Carregando produtos...</div>
+        <div id="products-grid" class="products-grid"></div>
+      </section>
+
+      <aside class="cart-panel" id="carrito">
+        <div class="cart-card sticky">
+          <div class="panel-title-row compact-board">
+            <div>
+              <p class="eyebrow">Carrinho</p>
+              <h2>Confirmar pedido</h2>
+            </div>
+            <span id="cart-counter" class="pill">0 itens</span>
+          </div>
+
+          <div id="cart-empty" class="empty-state">Voce ainda nao adicionou produtos.</div>
+          <div id="cart-items" class="cart-items"></div>
+
+          <div class="payment-panel">
+            <label class="payment-label" for="payment-method">Forma de pagamento</label>
+            <select id="payment-method" class="filter-input">
+              <option value="Pix">Pix</option>
+              <option value="Mercado Pago">Mercado Pago</option>
+              <option value="Cartao de credito">Cartao de credito</option>
+              <option value="Cartao de debito">Cartao de debito</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Transferencia bancaria">Transferencia bancaria</option>
+            </select>
+            <p class="payment-help">Escolha como prefere pagar. O operador responde no WhatsApp com a confirmacao final.</p>
+          </div>
+
+          <div class="summary">
+            <div class="summary-row">
+              <span>Total</span>
+              <strong id="cart-total">R$ 0,00</strong>
+            </div>
+            <button id="checkout-button" class="btn btn-primary full" type="button">Enviar pedido pelo WhatsApp</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <template id="product-card-template">
+    <article class="product-card reveal-up">
+      <div class="product-image-wrap">
+        <img class="product-image" alt="">
+      </div>
+      <div class="product-content">
+        <div class="product-meta">
+          <span class="product-category"></span>
+          <strong class="product-price"></strong>
+        </div>
+        <h3 class="product-name"></h3>
+        <p class="product-description"></p>
+        <div class="product-footer">
+          <span class="availability-tag">Disponivel</span>
+          <button class="btn btn-secondary add-product-button" type="button">Adicionar</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
