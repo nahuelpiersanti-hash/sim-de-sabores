@@ -7,6 +7,7 @@ const clearFiltersButton = document.getElementById('clear-filters');
 const categoryButtons = document.getElementById('category-buttons');
 const cartItemsContainer = document.getElementById('cart-items');
 const cartEmpty = document.getElementById('cart-empty');
+const cartNotice = document.getElementById('cart-notice');
 const cartCounter = document.getElementById('cart-counter');
 const topCartCount = document.getElementById('top-cart-count');
 const cartTotal = document.getElementById('cart-total');
@@ -20,6 +21,8 @@ const cartStorageKey = 'sim-de-sabores-cart';
 let allProducts = [];
 let cart = loadCart();
 let activeCategory = 'all';
+let isCatalogLoaded = false;
+let lastCartNotice = '';
 
 async function init() {
   bindEvents();
@@ -46,10 +49,16 @@ async function loadProducts() {
     }
 
     allProducts = await response.json();
+    isCatalogLoaded = true;
+
+    const { notice } = reconcileCart(allProducts);
     updateCategoryOptions();
     renderProducts();
+    renderCart(notice);
   } catch (error) {
+    isCatalogLoaded = false;
     statusMessage.textContent = 'Nao foi possivel carregar os produtos.';
+    renderCart(cart.length ? 'Nao foi possivel validar o carrinho com o catalogo atual.' : '');
     console.error(error);
   }
 }
@@ -127,12 +136,14 @@ function addToCart(product) {
   }
 
   persistCart();
+  lastCartNotice = '';
   renderCart();
 }
 
 function removeFromCart(productId) {
   cart = cart.filter((item) => item.id !== productId);
   persistCart();
+  lastCartNotice = '';
   renderCart();
 }
 
@@ -151,10 +162,12 @@ function changeQuantity(productId, delta) {
   }
 
   persistCart();
+  lastCartNotice = '';
   renderCart();
 }
 
-function renderCart() {
+function renderCart(notice = lastCartNotice) {
+  lastCartNotice = notice;
   cartItemsContainer.innerHTML = '';
 
   if (!cart.length) {
@@ -162,6 +175,9 @@ function renderCart() {
   } else {
     cartEmpty.style.display = 'none';
   }
+
+  cartNotice.hidden = !lastCartNotice;
+  cartNotice.textContent = lastCartNotice;
 
   let totalItems = 0;
   let totalPrice = 0;
@@ -195,7 +211,10 @@ function renderCart() {
   cartCounter.textContent = `${totalItems} itens`;
   topCartCount.textContent = String(totalItems);
   cartTotal.textContent = formatCurrency(totalPrice);
-  checkoutButton.disabled = totalItems === 0;
+  checkoutButton.disabled = totalItems === 0 || !isCatalogLoaded;
+  checkoutButton.textContent = isCatalogLoaded
+    ? 'Enviar pedido pelo WhatsApp'
+    : 'Catalogo indisponivel';
 }
 
 function createCategoryButton(value, label) {
@@ -221,6 +240,14 @@ function clearFilters() {
 }
 
 function handleCheckout() {
+  if (!isCatalogLoaded) {
+    renderCart('Nao foi possivel validar o catalogo antes do checkout. Recarregue a pagina.');
+    return;
+  }
+
+  const { notice } = reconcileCart(allProducts);
+  renderCart(notice);
+
   if (!cart.length) {
     return;
   }
@@ -246,6 +273,62 @@ function handleCheckout() {
 
 function persistCart() {
   localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+}
+
+function reconcileCart(products) {
+  const productMap = new Map(products.map((product) => [product.id, product]));
+  const nextCart = [];
+  const previousCart = JSON.stringify(cart);
+  let removedItems = 0;
+  let updatedItems = 0;
+
+  for (const item of cart) {
+    const product = productMap.get(item.id);
+
+    if (!product || !product.available) {
+      removedItems += Number(item.quantity) || 1;
+      continue;
+    }
+
+    const normalizedItem = {
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      quantity: Math.max(1, Number(item.quantity) || 1),
+    };
+
+    if (normalizedItem.name !== item.name || normalizedItem.price !== Number(item.price)) {
+      updatedItems += 1;
+    }
+
+    nextCart.push(normalizedItem);
+  }
+
+  cart = nextCart;
+
+  if (JSON.stringify(cart) !== previousCart) {
+    persistCart();
+  }
+
+  if (removedItems > 0 && updatedItems > 0) {
+    return {
+      notice: 'Seu carrinho foi atualizado: removemos itens indisponiveis e sincronizamos os valores atuais.',
+    };
+  }
+
+  if (removedItems > 0) {
+    return {
+      notice: `Seu carrinho foi atualizado: ${removedItems} item(ns) indisponivel(is) foram removido(s).`,
+    };
+  }
+
+  if (updatedItems > 0) {
+    return {
+      notice: 'Seu carrinho foi sincronizado com os dados atuais do catalogo.',
+    };
+  }
+
+  return { notice: '' };
 }
 
 function loadCart() {

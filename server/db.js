@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const dataDir = path.join(__dirname, 'data');
 const dbPath = path.join(dataDir, 'sim-de-sabores.sqlite');
+const catalogSeedVersion = 'catalog-v1';
 
 const legacySeedNames = new Set([
   'Flat White da Casa',
@@ -119,23 +120,32 @@ async function initDb() {
     )
   `);
 
+  await run(`
+    CREATE TABLE IF NOT EXISTS app_meta (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    )
+  `);
+
   const rows = await all('SELECT id, name FROM products ORDER BY id ASC');
+  const seedState = await get('SELECT value FROM app_meta WHERE key = ?', ['catalogSeedVersion']);
   const shouldResetLegacyCatalog = rows.length > 0 && rows.every((row) => legacySeedNames.has(row.name));
 
-  if (rows.length === 0 || shouldResetLegacyCatalog) {
-    if (shouldResetLegacyCatalog) {
-      await run('DELETE FROM products');
-    }
-
+  if (shouldResetLegacyCatalog) {
+    await run('DELETE FROM products');
     await insertSeedProducts(seedProducts);
+    await setMeta('catalogSeedVersion', catalogSeedVersion);
     return;
   }
 
-  const existingNames = new Set(rows.map((row) => row.name));
-  const missingSeedProducts = seedProducts.filter((product) => !existingNames.has(product.name));
+  if (!seedState && rows.length === 0) {
+    await insertSeedProducts(seedProducts);
+    await setMeta('catalogSeedVersion', catalogSeedVersion);
+    return;
+  }
 
-  if (missingSeedProducts.length > 0) {
-    await insertSeedProducts(missingSeedProducts);
+  if (!seedState) {
+    await setMeta('catalogSeedVersion', catalogSeedVersion);
   }
 }
 
@@ -154,6 +164,10 @@ async function insertSeedProducts(products) {
       ]
     );
   }
+}
+
+async function setMeta(key, value) {
+  await run('INSERT OR REPLACE INTO app_meta (key, value) VALUES (?, ?)', [key, value]);
 }
 
 async function listProducts() {

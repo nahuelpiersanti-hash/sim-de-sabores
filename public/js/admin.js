@@ -24,7 +24,7 @@ function bindEvents() {
 }
 
 async function loadProducts() {
-  adminMessage.textContent = 'Cargando productos...';
+  setAdminMessage('Cargando productos...', 'info');
 
   try {
     const response = await fetch('/products');
@@ -36,9 +36,9 @@ async function loadProducts() {
     products = await response.json();
     updateStats();
     renderTable();
-    adminMessage.textContent = products.length ? '' : 'No hay productos cargados.';
+    setAdminMessage(products.length ? '' : 'No hay productos cargados.', 'info');
   } catch (error) {
-    adminMessage.textContent = 'No se pudieron cargar los productos.';
+    setAdminMessage('No se pudieron cargar los productos.', 'error');
     console.error(error);
   }
 }
@@ -120,9 +120,9 @@ async function handleSubmit(event) {
 
     resetForm();
     await loadProducts();
-    adminMessage.textContent = productId ? 'Producto actualizado.' : 'Producto creado.';
+    setAdminMessage(productId ? 'Producto actualizado.' : 'Producto creado.', 'success');
   } catch (error) {
-    adminMessage.textContent = error.message;
+    setAdminMessage(error.message, 'error');
   }
 }
 
@@ -135,6 +135,7 @@ function populateForm(product) {
   form.category.value = product.category;
   form.available.checked = product.available;
   formTitle.textContent = `Editar producto #${product.id}`;
+  setAdminMessage(`Editando producto #${product.id}.`, 'info');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -164,10 +165,15 @@ async function handleDelete(productId) {
     }
 
     await loadProducts();
-    adminMessage.textContent = 'Producto eliminado.';
+    setAdminMessage('Producto eliminado.', 'success');
   } catch (error) {
-    adminMessage.textContent = error.message;
+    setAdminMessage(error.message, 'error');
   }
+}
+
+function setAdminMessage(message, tone = 'info') {
+  adminMessage.textContent = message;
+  adminMessage.dataset.tone = message ? tone : '';
 }
 
 function formatCurrency(value) {

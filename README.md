@@ -27,6 +27,13 @@ sim-de-sabores/
 
 ## Correr localmente
 
+Opcional: definir credenciales del panel antes de iniciar.
+
+```bash
+$env:ADMIN_USERNAME="admin"
+$env:ADMIN_PASSWORD="cambiar-esto"
+```
+
 1. Instalar dependencias:
 
 ```bash
@@ -44,17 +51,23 @@ npm run dev
 - Frontend: http://localhost:3000
 - Admin: http://localhost:3000/admin.html
 
+Si no defines variables de entorno, el panel usa Basic Auth con credenciales por defecto:
+
+- Usuario: admin
+- Password: sim-de-sabores
+
 ## API
 
 - GET /products
-- POST /products
-- PUT /products/:id
-- DELETE /products/:id
+- POST /products (requiere Basic Auth)
+- PUT /products/:id (requiere Basic Auth)
+- DELETE /products/:id (requiere Basic Auth)
 
 ## Notas
 
 - La base SQLite se crea automaticamente en server/data/sim-de-sabores.sqlite.
+- El seed inicial del catalogo se inserta una sola vez y no reaparece despues de borrar productos manualmente.
 - El frontend solo muestra productos disponibles.
-- El carrito se guarda en localStorage.
+- El carrito se guarda en localStorage y se reconcilia contra el catalogo actual antes del checkout.
 - El checkout genera un mensaje para WhatsApp. Cambia el telefono en public/js/app.js.
 - Los precios del frontend y del admin se muestran en BRL.

@@ -67,6 +67,7 @@ body {
 
 .admin-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
 }
@@ -230,6 +231,19 @@ body {
   padding: 0.9rem 1rem;
 }
 
+.product-form input:focus-visible,
+.product-form textarea:focus-visible,
+.table-search:focus-visible,
+.primary-button:focus-visible,
+.ghost-button:focus-visible,
+.table-action:focus-visible,
+.delete-button:focus-visible,
+.admin-nav a:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid rgba(212, 160, 23, 0.2);
+  outline-offset: 2px;
+}
+
 .full-span {
   grid-column: 1 / -1;
 }
@@ -279,6 +293,15 @@ body {
   transform: translateY(-1px);
 }
 
+.primary-button:disabled,
+.ghost-button:disabled,
+.table-action:disabled,
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
 .ghost-button,
 .table-action {
   background: transparent;
@@ -293,8 +316,25 @@ body {
 }
 
 .admin-message {
+  border-left: 1px solid transparent;
   color: var(--muted);
   margin-bottom: 1rem;
+  min-height: 1.6rem;
+  padding-left: 0.75rem;
+}
+
+.admin-message[data-tone='success'] {
+  border-color: rgba(93, 185, 121, 0.3);
+  color: var(--ok);
+}
+
+.admin-message[data-tone='error'] {
+  border-color: rgba(224, 92, 76, 0.35);
+  color: var(--danger);
+}
+
+.admin-message[data-tone='info'] {
+  border-color: rgba(212, 160, 23, 0.32);
 }
 
 .table-wrap {
@@ -386,6 +426,10 @@ th {
   .product-form {
     grid-template-columns: 1fr;
   }
+
+  .admin-main {
+    padding: 1rem;
+  }
 }
 
 @media (max-width: 680px) {
@@ -396,5 +440,14 @@ th {
   .actions-row {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .admin-topbar {
+    padding: 1rem;
+  }
+
+  th,
+  td {
+    padding: 0.8rem 0.55rem;
   }
 }

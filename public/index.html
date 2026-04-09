@@ -102,7 +102,7 @@
           <div class="live-chip">estoque em tempo real (local)</div>
         </div>
 
-        <div id="status-message" class="status-message">Carregando produtos...</div>
+        <div id="status-message" class="status-message" aria-live="polite">Carregando produtos...</div>
         <div id="products-grid" class="products-grid"></div>
       </section>
 
@@ -118,6 +118,7 @@
 
           <div id="cart-empty" class="empty-state">Voce ainda nao adicionou produtos.</div>
           <div id="cart-items" class="cart-items"></div>
+          <p id="cart-notice" class="cart-notice" aria-live="polite" hidden></p>
 
           <div class="payment-panel">
             <label class="payment-label" for="payment-method">Forma de pagamento</label>
@@ -138,6 +139,7 @@
               <strong id="cart-total">R$ 0,00</strong>
             </div>
             <button id="checkout-button" class="btn btn-primary full" type="button">Enviar pedido pelo WhatsApp</button>
+            <p class="checkout-help">Antes de abrir o WhatsApp, validamos disponibilidade e valores atuais do catalogo.</p>
           </div>
         </div>
       </aside>
