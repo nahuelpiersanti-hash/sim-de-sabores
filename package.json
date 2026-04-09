@@ -15,12 +15,15 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20.17.0"
+  },
   "bugs": {
     "url": "https://github.com/nahuelpiersanti-hash/sim-de-sabores/issues"
   },
   "homepage": "https://github.com/nahuelpiersanti-hash/sim-de-sabores#readme",
   "dependencies": {
-    "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "better-sqlite3": "^12.8.0",
+    "express": "^5.2.1"
   }
 }

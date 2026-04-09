@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 
 const dataDir = path.join(__dirname, 'data');
 const dbPath = path.join(dataDir, 'sim-de-sabores.sqlite');
@@ -66,45 +66,27 @@ const seedProducts = [
 
 fs.mkdirSync(dataDir, { recursive: true });
 
-const db = new sqlite3.Database(dbPath);
+const db = new Database(dbPath);
+db.pragma('journal_mode = WAL');
 
 function run(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function onRun(error) {
-      if (error) {
-        reject(error);
-        return;
-      }
+  const statement = db.prepare(sql);
+  const result = statement.run(params);
 
-      resolve({ id: this.lastID, changes: this.changes });
-    });
+  return Promise.resolve({
+    id: result.lastInsertRowid,
+    changes: result.changes,
   });
 }
 
 function get(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (error, row) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-
-      resolve(row);
-    });
-  });
+  const statement = db.prepare(sql);
+  return Promise.resolve(statement.get(params));
 }
 
 function all(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (error, rows) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-
-      resolve(rows);
-    });
-  });
+  const statement = db.prepare(sql);
+  return Promise.resolve(statement.all(params));
 }
 
 async function initDb() {
