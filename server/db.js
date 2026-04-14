@@ -16,7 +16,7 @@ const legacySeedNames = new Set([
 const seedProducts = [
   {
     name: 'Fernet Branca 750 ml',
-    description: 'Classico argentino para servir bem gelado ou com cola. Publico brasileiro entende rapido e recompra.',
+    description: 'Clássico argentino para tomar bem gelado, com cola ou em drinks. Sucesso garantido entre brasileiros e turistas.',
     price: 26.5,
     image: 'https://images.unsplash.com/photo-1609951651556-5334e2706168?auto=format&fit=crop&w=900&q=80',
     category: 'Bebidas & Aperitivos',
@@ -24,7 +24,7 @@ const seedProducts = [
   },
   {
     name: 'Yerba Mate Canarias 1 kg',
-    description: 'Pacote importado para quem sente falta do mate do sul. Giro alto entre argentinos em Florianopolis.',
+    description: 'A tradicional yerba mate do sul, importada da Argentina. Sabor autêntico para quem não abre mão do mate bem feito.',
     price: 18.9,
     image: 'https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?auto=format&fit=crop&w=900&q=80',
     category: 'Yerbas & Mate',
@@ -32,7 +32,7 @@ const seedProducts = [
   },
   {
     name: 'Dulce de Leche Colonial 450 g',
-    description: 'Doce de leite argentino para cafe da manha, sobremesas e venda por impulso.',
+    description: 'Doce de leite argentino cremoso e irresistível. Ideal para café da manhã, sobremesas ou comer de colher.',
     price: 14.9,
     image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80',
     category: 'Doces',
@@ -40,7 +40,7 @@ const seedProducts = [
   },
   {
     name: 'Mate Cocido 25 saquitos',
-    description: 'Opcao rapida para cliente brasileiro que quer provar mate sem preparar cuia.',
+    description: 'Opção prática e rápida para quem quer provar o mate sem preparar a cuia tradicional. Perfeito para o dia a dia.',
     price: 5.4,
     image: '',
     category: 'Te & Infusoes',
@@ -48,7 +48,7 @@ const seedProducts = [
   },
   {
     name: 'Alfajor Havanna 6 unidades',
-    description: 'Caixa com alfajores para presente, revenda no balcão ou kits para turistas.',
+    description: 'Caixa com alfajores importados, ideal para presentear, lanche da tarde ou revenda. Um clássico que todo mundo ama!',
     price: 22.9,
     image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80',
     category: 'Doces',
@@ -56,7 +56,7 @@ const seedProducts = [
   },
   {
     name: 'Chimichurri Premium 240 g',
-    description: 'Tempero argentino para carnes e legumes. Boa porta de entrada para cliente brasileiro.',
+    description: 'Tempero argentino clássico, perfeito para carnes, legumes e churrasco. Feito com ingredientes selecionados e muito carinho.',
     price: 8.9,
     image: '',
     category: 'Aceites & Vinagres',

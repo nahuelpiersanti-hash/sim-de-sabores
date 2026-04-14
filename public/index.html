@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sim de Sabores Cafe</title>
+  <title>Sim de Sabores</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
@@ -14,11 +14,11 @@
   <header class="topbar">
     <div class="brand-wrap">
       <a class="brand" href="#inicio">Sim de Sabores</a>
-      <span class="brand-sub">Argentina no Brasil</span>
+      <span class="brand-sub">Cozinha de assinatura • Doces & Salgados</span>
     </div>
     <div class="topbar-actions">
       <a class="top-link" href="/admin.html">Portal</a>
-      <a class="top-link" href="#catalogo">Loja</a>
+      <a class="top-link" href="#catalogo">Ver produtos</a>
       <a class="top-link active" href="#carrito">Carrinho <span id="top-cart-count">0</span></a>
     </div>
   </header>
@@ -27,32 +27,33 @@
     <section class="hero" id="inicio">
       <div class="hero-grid">
         <div>
-          <p class="eyebrow">Loja conectada ao portal de gestao</p>
-          <h1>Sabores argentinos para clientes brasileiros, cobrando em real e fechando pelo WhatsApp.</h1>
-          <p class="hero-copy">O operador trabalha em espanhol no portal, publica produtos no servidor propio y la tienda responde em portugues com Pix, Mercado Pago, cartao, transferencia e dinheiro.</p>
+          <p class="eyebrow">Sabores feitos com muito carinho em Bombinhas</p>
+          <h1>Sim de Sabores</h1>
+          <p class="hero-copy">Estamos trabalhando 100% online por encomenda. Preparamos com dedicação brownies inteiros, lemon pie com merengue, chocotorta argentina, pastafrola, coxinhas gourmet, massas de pizza e os melhores produtos argentinos para você curtir na praia ou em casa.
+Entrega local em Bombinhas e Cantogrande • Pagamento fácil via Pix</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#catalogo">Comprar agora</a>
+            <a class="btn btn-primary" href="#catalogo">Ver produtos</a>
             <a class="btn btn-secondary" href="/admin.html">Abrir portal</a>
           </div>
           <div class="hero-note">
-            <span id="hero-count">0 produtos disponiveis</span>
+            <span id="hero-count">7 produtos disponíveis • Tudo preparado com dedicação</span>
             <span class="dot"></span>
-            <span>Operacao local sincronizada em tempo real</span>
+            <span>📍 Bombinhas • Cantogrande • SC • Encomendas online</span>
           </div>
         </div>
 
         <aside class="hero-board">
           <div class="hero-board-line">
-            <span class="hero-label">Publico</span>
-            <strong>argentinos operando, brasileiros comprando</strong>
+            <span class="hero-label">Encomendas online</span>
+            <strong>com estoque atualizado em tempo real</strong>
           </div>
           <div class="hero-board-line">
-            <span class="hero-label">Pagamentos</span>
-            <strong>Pix, Mercado Pago, cartoes e dinheiro</strong>
+            <span class="hero-label">Feito com carinho</span>
+            <strong>sabores argentinos e criações próprias para momentos especiais</strong>
           </div>
           <div class="hero-board-line">
-            <span class="hero-label">Moeda</span>
-            <strong>BRL em toda a experiencia de compra</strong>
+            <span class="hero-label">Agradecemos seu pedido</span>
+            <strong>tudo preparado com dedicação para curtir na praia ou em casa</strong>
           </div>
         </aside>
       </div>
@@ -89,17 +90,17 @@
           </div>
         </div>
 
-        <p class="filter-help">Todos os itens exibidos estao publicados e prontos para venda em BRL.</p>
+        <p class="filter-help">Todos os itens exibidos estão disponíveis para encomendas online e preparados com muito carinho.</p>
         <button id="clear-filters" class="btn btn-secondary full" type="button">Limpar filtros</button>
       </aside>
 
       <section class="catalog-panel">
         <div class="panel-title-row board-title">
           <div>
-            <p class="eyebrow">Comprar</p>
-            <h2>Catalogo publicado</h2>
+            <p class="eyebrow">Ver produtos</p>
+            <h2>Encomendas online</h2>
           </div>
-          <div class="live-chip">estoque em tempo real (local)</div>
+          <div class="live-chip">feito com muito carinho</div>
         </div>
 
         <div id="status-message" class="status-message" aria-live="polite">Carregando produtos...</div>
@@ -111,12 +112,12 @@
           <div class="panel-title-row compact-board">
             <div>
               <p class="eyebrow">Carrinho</p>
-              <h2>Confirmar pedido</h2>
+              <h2>Finalizar encomenda</h2>
             </div>
             <span id="cart-counter" class="pill">0 itens</span>
           </div>
 
-          <div id="cart-empty" class="empty-state">Voce ainda nao adicionou produtos.</div>
+          <div id="cart-empty" class="empty-state">Você ainda não adicionou produtos à sua encomenda.</div>
           <div id="cart-items" class="cart-items"></div>
           <p id="cart-notice" class="cart-notice" aria-live="polite" hidden></p>
 
@@ -130,7 +131,7 @@
               <option value="Dinheiro">Dinheiro</option>
               <option value="Transferencia bancaria">Transferencia bancaria</option>
             </select>
-            <p class="payment-help">Escolha como prefere pagar. O operador responde no WhatsApp com a confirmacao final.</p>
+            <p class="payment-help">Escolha como prefere pagar. Agradecemos seu pedido e confirmamos tudo pelo WhatsApp.</p>
           </div>
 
           <div class="summary">
@@ -139,7 +140,7 @@
               <strong id="cart-total">R$ 0,00</strong>
             </div>
             <button id="checkout-button" class="btn btn-primary full" type="button">Enviar pedido pelo WhatsApp</button>
-            <p class="checkout-help">Antes de abrir o WhatsApp, validamos disponibilidade e valores atuais do catalogo.</p>
+            <p class="checkout-help">Antes de abrir o WhatsApp, validamos disponibilidade e valores atualizados da sua encomenda.</p>
           </div>
         </div>
       </aside>

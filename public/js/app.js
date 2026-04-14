@@ -39,13 +39,13 @@ function bindEvents() {
 }
 
 async function loadProducts() {
-  statusMessage.textContent = 'Carregando produtos...';
+  statusMessage.textContent = 'Carregando sabores feitos com carinho...';
 
   try {
     const response = await fetch('/products');
 
     if (!response.ok) {
-      throw new Error('Nao foi possivel consultar o catalogo.');
+      throw new Error('Nao foi possivel consultar os produtos no momento.');
     }
 
     allProducts = await response.json();
@@ -57,8 +57,8 @@ async function loadProducts() {
     renderCart(notice);
   } catch (error) {
     isCatalogLoaded = false;
-    statusMessage.textContent = 'Nao foi possivel carregar os produtos.';
-    renderCart(cart.length ? 'Nao foi possivel validar o carrinho com o catalogo atual.' : '');
+    statusMessage.textContent = 'Nao foi possivel carregar os produtos agora. Tente novamente em instantes.';
+    renderCart(cart.length ? 'Nao foi possivel validar sua encomenda com o catalogo atual.' : '');
     console.error(error);
   }
 }
@@ -95,8 +95,8 @@ function renderProducts() {
     return matchesCategory && matchesSearch && matchesMinPrice && matchesMaxPrice;
   });
 
-  heroCount.textContent = `${visibleProducts.length} produtos disponiveis`;
-  statusMessage.textContent = visibleProducts.length ? '' : 'Nao ha produtos para mostrar com esses filtros.';
+  heroCount.textContent = `${visibleProducts.length} produtos disponíveis • Tudo preparado com dedicação`;
+  statusMessage.textContent = visibleProducts.length ? '' : 'Nao encontramos produtos com esses filtros no momento.';
   productsGrid.innerHTML = '';
 
   for (const product of visibleProducts) {
@@ -114,7 +114,7 @@ function renderProducts() {
     categoryElement.textContent = product.category;
     priceElement.textContent = formatCurrency(product.price);
     nameElement.textContent = product.name;
-    descriptionElement.textContent = product.description || 'Sem descricao.';
+    descriptionElement.textContent = product.description || 'Feito com muito carinho para momentos especiais.';
     button.addEventListener('click', () => addToCart(product));
 
     productsGrid.appendChild(fragment);
@@ -214,7 +214,7 @@ function renderCart(notice = lastCartNotice) {
   checkoutButton.disabled = totalItems === 0 || !isCatalogLoaded;
   checkoutButton.textContent = isCatalogLoaded
     ? 'Enviar pedido pelo WhatsApp'
-    : 'Catalogo indisponivel';
+    : 'Produtos indisponiveis';
 }
 
 function createCategoryButton(value, label) {
@@ -241,7 +241,7 @@ function clearFilters() {
 
 function handleCheckout() {
   if (!isCatalogLoaded) {
-    renderCart('Nao foi possivel validar o catalogo antes do checkout. Recarregue a pagina.');
+    renderCart('Nao foi possivel validar os produtos antes do checkout. Recarregue a pagina.');
     return;
   }
 
@@ -256,14 +256,14 @@ function handleCheckout() {
   const paymentMethod = paymentMethodSelect?.value || 'Pix';
   const lines = cart.map((item) => `- ${item.name} x${item.quantity} = ${formatCurrency(item.price * item.quantity)}`);
   const message = [
-    'Ola, quero fazer este pedido:',
+    'Ola! Quero fazer esta encomenda:',
     '',
     ...lines,
     '',
     `Forma de pagamento: ${paymentMethod}`,
     `Total: ${formatCurrency(total)}`,
     '',
-    'Se precisar, posso receber os dados para Pix, Mercado Pago ou outro meio de pagamento.',
+    'Agradecemos seu pedido. Se precisar, posso receber os dados para Pix ou combinar a entrega pelo WhatsApp.',
   ].join('\n');
 
   const phone = '5500000000000';
@@ -312,19 +312,19 @@ function reconcileCart(products) {
 
   if (removedItems > 0 && updatedItems > 0) {
     return {
-      notice: 'Seu carrinho foi atualizado: removemos itens indisponiveis e sincronizamos os valores atuais.',
+      notice: 'Sua encomenda foi atualizada: removemos itens indisponiveis e sincronizamos os valores atuais.',
     };
   }
 
   if (removedItems > 0) {
     return {
-      notice: `Seu carrinho foi atualizado: ${removedItems} item(ns) indisponivel(is) foram removido(s).`,
+      notice: `Sua encomenda foi atualizada: ${removedItems} item(ns) indisponivel(is) foram removido(s).`,
     };
   }
 
   if (updatedItems > 0) {
     return {
-      notice: 'Seu carrinho foi sincronizado com os dados atuais do catalogo.',
+      notice: 'Sua encomenda foi sincronizada com os dados atuais do catalogo.',
     };
   }
 
